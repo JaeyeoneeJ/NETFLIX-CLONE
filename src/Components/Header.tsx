@@ -40,7 +40,10 @@ const Item = styled.li`
   margin-right: 20px;
   color: ${(props) => props.theme.white.darker};
   transition: color 0.3s ease-in-out;
-
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   &:hover {
     color: ${(props) => props.theme.white.lighter};
   }
@@ -51,6 +54,18 @@ const Search = styled.span`
   svg {
     height: 25px;
   }
+`;
+
+const Circle = styled.span`
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background-color: ${(props) => props.theme.red};
+  border-radius: 5px;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 `;
 
 const logoVariants: Variants = {
@@ -84,8 +99,14 @@ function Header() {
           />
         </Logo>
         <Items>
-          <Item>Home</Item>
-          <Item>TV Shows</Item>
+          <Item>
+            Home
+            <Circle />
+          </Item>
+          <Item>
+            TV Shows
+            <Circle />
+          </Item>
         </Items>
       </Col>
       <Col>
