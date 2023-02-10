@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { motion, Variants } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const Nav = styled.nav`
   display: flex;
@@ -100,12 +101,16 @@ function Header() {
         </Logo>
         <Items>
           <Item>
-            Home
-            <Circle />
+            <Link to="/">
+              Home
+              <Circle />
+            </Link>
           </Item>
           <Item>
-            TV Shows
-            <Circle />
+            <Link to="/tv">
+              TV Shows
+              <Circle />
+            </Link>
           </Item>
         </Items>
       </Col>
