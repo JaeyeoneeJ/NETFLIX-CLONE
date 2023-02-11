@@ -76,7 +76,14 @@ const Circle = styled(motion.span)`
 const Input = styled(motion.input)`
   transform-origin: right center;
   position: absolute;
-  left: -150px;
+  right: 0px;
+  padding: 5px 10px;
+  padding-left: 40px;
+  z-index: -1;
+  color: white;
+  font-size: 16px;
+  background-color: transparent;
+  border: 1px solid ${(props) => props.theme.white.lighter};
 `;
 
 const logoVariants: Variants = {
@@ -96,7 +103,14 @@ function Header() {
   const homeMatch = useMatch("/");
   const tvMatch = useMatch("/tv");
 
-  const toggleSearch = () => setSearchOpen((prev) => !prev);
+  const toggleSearch = () => {
+    if (searchOpen) {
+      // trigger the close animation
+    } else {
+      // trigger the close animation
+    }
+    setSearchOpen((prev) => !prev);
+  };
   return (
     <Nav>
       <Col>
@@ -146,6 +160,7 @@ function Header() {
             ></path>
           </motion.svg>
           <Input
+            initial={{ scaleX: 0 }}
             animate={{ scaleX: searchOpen ? 1 : 0 }}
             transition={{ type: "linear" }}
             placeholder="Search for movie or tv show..."
