@@ -57,7 +57,7 @@ const Search = styled.span`
   }
 `;
 
-const Circle = styled.span`
+const Circle = styled(motion.span)`
   position: absolute;
   width: 5px;
   height: 5px;
@@ -106,13 +106,13 @@ function Header() {
           <Item>
             <Link to="/">
               Home
-              {homeMatch && <Circle />}
+              {homeMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
           <Item>
             <Link to="/tv">
               TV Shows
-              {tvMatch && <Circle />}
+              {tvMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
         </Items>
