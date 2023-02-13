@@ -81,7 +81,7 @@ const Info = styled(motion.div)`
 `;
 
 const Overlay = styled(motion.div)`
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
   height: 100%;
@@ -205,7 +205,11 @@ function Home() {
           <AnimatePresence>
             {bigMovieMatch ? (
               <>
-                <Overlay onClick={onOverlayClick} animate={{ opacity: 1 }} />
+                <Overlay
+                  onClick={onOverlayClick}
+                  exit={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                />
                 <motion.div
                   layoutId={bigMovieMatch.params.movieId}
                   style={{
