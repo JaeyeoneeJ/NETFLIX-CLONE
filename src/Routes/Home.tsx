@@ -7,6 +7,7 @@ import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
   background: black;
+  overflow-x: hidden;
 `;
 
 const Loader = styled.div`
@@ -38,13 +39,13 @@ const Overview = styled.p`
 
 const Slider = styled.div`
   position: relative;
-  top: -100px;
+  top: -200px;
 `;
 
 const Row = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
+  gap: 5px;
   position: absolute;
   width: 100%;
 `;
@@ -58,13 +59,13 @@ const Box = styled(motion.div)`
 
 const rowVariants: Variants = {
   hidden: {
-    x: window.outerWidth,
+    x: window.outerWidth + 5,
   },
   visible: {
     x: 0,
   },
   exit: {
-    x: -window.outerWidth,
+    x: -window.outerWidth - 5,
   },
 };
 
@@ -95,13 +96,13 @@ function Home() {
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
           <Slider>
-            <AnimatePresence onExitComplete={toggleLeaving}>
+            <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
               <Row
                 variants={rowVariants}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                transition={{ type: "tween", duration: 1 }}
+                transition={{ type: "tween", duration: 3 }}
                 key={index}
               >
                 {[1, 2, 3, 4, 5, 6].map((i) => (
