@@ -6,7 +6,7 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "framer-motion";
-import { Link, useMatch } from "react-router-dom";
+import { Link, useMatch, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -147,9 +147,12 @@ function Header() {
     }
   });
 
+  const navigate = useNavigate();
+
   const { register, handleSubmit } = useForm<IForm>();
   const onValid = (data: IForm) => {
     console.log(data);
+    navigate(`/search?keyword=${data.keywork}`);
   };
   return (
     <Nav variants={navVariants} animate={navAnimation} initial="top">
