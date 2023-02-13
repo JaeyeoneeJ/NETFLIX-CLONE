@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getMovies, IGetMoviesResult } from "../api";
@@ -52,47 +53,55 @@ const Box = styled(motion.div)`
   height: 200px;
 `;
 
+const rowVariants: Variants = {
+  hidden: {
+    x: 1000,
+  },
+  visible: {
+    x: 0,
+  },
+  exit: {
+    x: -1000,
+  },
+};
+
 function Home() {
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
   );
-  console.log(data, isLoading);
+  const [index, setIndex] = useState(0);
+  const increaseIndex = () => setIndex((prev) => prev + 1);
   return (
     <Wrapper>
       {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
+          <Banner
+            onClick={increaseIndex}
+            bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}
+          >
             <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
           <Slider>
-            <Row>
-              <Box />
-              <Box />
-              <Box />
-              <Box />
-              <Box />
-              <Box />
-            </Row>
-            <Row>
-              <Box />
-              <Box />
-              <Box />
-              <Box />
-              <Box />
-              <Box />
-            </Row>
-            <Row>
-              <Box />
-              <Box />
-              <Box />
-              <Box />
-              <Box />
-              <Box />
-            </Row>
+            <AnimatePresence>
+              <Row
+                variants={rowVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                key={index}
+              >
+                <Box />
+                <Box />
+                <Box />
+                <Box />
+                <Box />
+                <Box />
+              </Row>
+            </AnimatePresence>
           </Slider>
         </>
       )}
