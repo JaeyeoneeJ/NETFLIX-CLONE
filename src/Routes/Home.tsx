@@ -58,6 +58,12 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   height: 200px;
   color: red;
   font-size: 66px;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
 `;
 
 const rowVariants: Variants = {
@@ -81,6 +87,7 @@ const BoxVariants: Variants = {
     y: -50,
     transition: {
       delay: 0.5,
+      duration: 0.3,
       type: "tween",
     },
   },
