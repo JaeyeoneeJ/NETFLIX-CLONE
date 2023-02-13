@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, Variants } from "framer-motion";
+import { motion, AnimatePresence, Variants, useScroll } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import { makeImagePath } from "../utils";
 const Wrapper = styled.div`
   background: black;
   overflow-x: hidden;
+  height: 200vh;
 `;
 
 const Loader = styled.div`
@@ -132,7 +133,7 @@ const offset = 6;
 function Home() {
   const navigate = useNavigate();
   const bigMovieMatch = useMatch("/movies/:movieId");
-  console.log(bigMovieMatch);
+  const { scrollY } = useScroll();
 
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
@@ -217,12 +218,14 @@ function Home() {
                     width: "40vw",
                     height: "80vh",
                     backgroundColor: "red",
-                    top: 50,
+                    top: scrollY.get() + 100,
                     left: 0,
                     right: 0,
                     margin: "0 auto",
                   }}
-                ></motion.div>
+                >
+                  hello
+                </motion.div>
               </>
             ) : null}
           </AnimatePresence>
