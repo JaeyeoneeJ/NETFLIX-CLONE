@@ -57,13 +57,13 @@ const Box = styled(motion.div)`
 
 const rowVariants: Variants = {
   hidden: {
-    x: 2000,
+    x: window.outerWidth,
   },
   visible: {
     x: 0,
   },
   exit: {
-    x: -2000,
+    x: -window.outerWidth,
   },
 };
 
