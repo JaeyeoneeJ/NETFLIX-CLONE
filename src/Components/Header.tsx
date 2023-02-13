@@ -8,6 +8,7 @@ import {
 } from "framer-motion";
 import { Link, useMatch } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -56,7 +57,7 @@ const Item = styled.li`
   }
 `;
 
-const Search = styled.span`
+const Search = styled.form`
   color: white;
   align-items: center;
   display: flex;
@@ -112,6 +113,10 @@ const navVariants: Variants = {
   },
 };
 
+interface IForm {
+  keywork: string;
+}
+
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useMatch("/");
@@ -141,6 +146,11 @@ function Header() {
       navAnimation.start("up");
     }
   });
+
+  const { register, handleSubmit } = useForm<IForm>();
+  const onValid = (data: IForm) => {
+    console.log(data);
+  };
   return (
     <Nav variants={navVariants} animate={navAnimation} initial="top">
       <Col>
@@ -174,7 +184,7 @@ function Header() {
         </Items>
       </Col>
       <Col>
-        <Search>
+        <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -180 : 0 }}
@@ -190,6 +200,7 @@ function Header() {
             ></path>
           </motion.svg>
           <Input
+            {...register("keywork", { required: true, minLength: 2 })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}
