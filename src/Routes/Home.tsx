@@ -51,17 +51,19 @@ const Row = styled(motion.div)`
 const Box = styled(motion.div)`
   background-color: white;
   height: 200px;
+  color: red;
+  font-size: 66px;
 `;
 
 const rowVariants: Variants = {
   hidden: {
-    x: 1000,
+    x: 2000,
   },
   visible: {
     x: 0,
   },
   exit: {
-    x: -1000,
+    x: -2000,
   },
 };
 
@@ -92,14 +94,12 @@ function Home() {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
+                transition={{ type: "tween", duration: 1 }}
                 key={index}
               >
-                <Box />
-                <Box />
-                <Box />
-                <Box />
-                <Box />
-                <Box />
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <Box key={i}>{i}</Box>
+                ))}
               </Row>
             </AnimatePresence>
           </Slider>
