@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getMovies, IGetMoviesResult } from "../api";
@@ -16,7 +17,6 @@ const Loader = styled.div`
 
 const Banner = styled.div<{ bgPhoto: string }>`
   height: 100vh;
-  background-color: red;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,8 +31,25 @@ const Title = styled.h2`
   margin-bottom: 20px;
 `;
 const Overview = styled.p`
-  font-size: 36px;
+  font-size: 30px;
   width: 50%;
+`;
+
+const Slider = styled.div`
+  position: relative;
+`;
+
+const Row = styled(motion.div)`
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  position: absolute;
+  width: 100%;
+`;
+
+const Box = styled(motion.div)`
+  background-color: white;
+  height: 200px;
 `;
 
 function Home() {
@@ -51,6 +68,32 @@ function Home() {
             <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
+          <Slider>
+            <Row>
+              <Box />
+              <Box />
+              <Box />
+              <Box />
+              <Box />
+              <Box />
+            </Row>
+            <Row>
+              <Box />
+              <Box />
+              <Box />
+              <Box />
+              <Box />
+              <Box />
+            </Row>
+            <Row>
+              <Box />
+              <Box />
+              <Box />
+              <Box />
+              <Box />
+              <Box />
+            </Row>
+          </Slider>
         </>
       )}
     </Wrapper>
