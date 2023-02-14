@@ -5,10 +5,42 @@ import styled from "styled-components";
 import { IGetMoviesResult } from "../api";
 import useWindowDimensions from "../Hook/useWindowDimensions";
 import { makeImagePath } from "../utils";
+import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 
 const Wrapper = styled.div`
   position: relative;
   top: -200px;
+`;
+
+const ButtonArea = styled.div`
+  opacity: 1;
+  z-index: 2;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  top: -55px;
+  /* background-color: rgba(255, 255, 255, 0.5); */
+`;
+
+const ButtonIcon = styled.button`
+  /* width: 30px;
+  height: 30px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  &:hover {
+    scale: 1.3;
+  }
+  svg {
+    color: white;
+  }
 `;
 
 const Row = styled(motion.div)<{ offset: number }>`
@@ -145,6 +177,15 @@ const Slider = ({ data }: { data: IGetMoviesResult }) => {
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
+  const decreaseIndex = () => {
+    if (data) {
+      if (leaving) return;
+      toggleLeaving();
+      const totalMovies = data?.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
   const toggleLeaving = () => setLeaving((prev) => !prev);
 
   const onBoxClicked = (movieId: number) => {
@@ -161,6 +202,14 @@ const Slider = ({ data }: { data: IGetMoviesResult }) => {
     <>
       <Wrapper>
         <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+          <ButtonArea>
+            <ButtonIcon onClick={decreaseIndex}>
+              <RxDoubleArrowLeft size={50} />
+            </ButtonIcon>
+            <ButtonIcon onClick={increaseIndex}>
+              <RxDoubleArrowRight size={50} />
+            </ButtonIcon>
+          </ButtonArea>
           <Row
             variants={rowVariants}
             initial="hidden"
