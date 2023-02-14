@@ -28,15 +28,25 @@ const Banner = styled.div<{ bgphoto: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgphoto});
   background-size: cover;
+  @media screen and (max-width: 800px) {
+    height: auto;
+  }
 `;
 
 const Title = styled.h2`
   font-size: 68px;
+  font-weight: 400;
   margin-bottom: 20px;
+  @media screen and (max-width: 800px) {
+    font-size: 46px;
+  }
 `;
 const Overview = styled.p`
-  font-size: 30px;
+  font-size: 24px;
   width: 50%;
+  @media screen and (max-width: 800px) {
+    font-size: 20px;
+  }
 `;
 
 const Slider = styled.div`
@@ -52,14 +62,14 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgphoto: string }>`
+const Box = styled(motion.div)`
   background-color: white;
-  background-image: url(${(props) => props.bgphoto});
-  background-size: cover;
-  background-position: center center;
-  height: 200px;
   font-size: 66px;
   cursor: pointer;
+  aspect-ratio: 16 / 9;
+  img {
+    display: block;
+  }
   &:first-child {
     transform-origin: center left;
   }
@@ -229,9 +239,13 @@ function Home() {
                       whileHover="hover"
                       initial="normal"
                       transition={{ type: "tween" }}
-                      bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                       onClick={() => onBoxClicked(movie.id)}
                     >
+                      <img
+                        src={makeImagePath(movie.backdrop_path, "w500")}
+                        alt="Box-image"
+                        style={{ width: "100%" }}
+                      />
                       <Info variants={infoVariants}>
                         <h4>{movie.title}</h4>
                       </Info>
