@@ -66,7 +66,7 @@ function Home() {
             <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
-          <Slider data={data!} />
+          <Slider data={data!}>{"Now Playing..."}</Slider>
         </>
       )}
     </Wrapper>

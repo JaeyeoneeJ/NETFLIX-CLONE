@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useScroll, Variants } from "framer-motion";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IGetMoviesResult } from "../api";
@@ -165,7 +165,13 @@ interface IisBack {
   };
 }
 
-const Slider = ({ data }: { data: IGetMoviesResult }) => {
+const Slider = ({
+  data,
+  children,
+}: {
+  data: IGetMoviesResult;
+  children: ReactNode;
+}) => {
   let offset = useWindowDimensions() >= 1200 ? 6 : 3;
   let resizeWidth = useWindowDimensions();
   const navigate = useNavigate();
@@ -224,7 +230,7 @@ const Slider = ({ data }: { data: IGetMoviesResult }) => {
   return (
     <>
       <Wrapper>
-        <SliderTitle>{"Now Playing..."}</SliderTitle>
+        <SliderTitle>{children}</SliderTitle>
         <AnimatePresence
           custom={{ back }}
           initial={false}
