@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getMovies, IGetMoviesResult } from "../api";
+import useWindowDimensions from "../Hook/useWindowDimensions";
 import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
@@ -54,9 +55,9 @@ const Slider = styled.div`
   top: -200px;
 `;
 
-const Row = styled(motion.div)`
+const Row = styled(motion.div)<{ offset: number }>`
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(${(props) => props.offset}, 1fr);
   gap: 5px;
   position: absolute;
   width: 100%;
@@ -132,18 +133,6 @@ const BigOverview = styled.p`
   color: ${(props) => props.theme.white.lighter};
 `;
 
-const rowVariants: Variants = {
-  hidden: {
-    x: window.outerWidth + 5,
-  },
-  visible: {
-    x: 0,
-  },
-  exit: {
-    x: -window.outerWidth - 5,
-  },
-};
-
 const boxVariants: Variants = {
   normal: {
     scale: 1,
@@ -170,9 +159,19 @@ const infoVariants: Variants = {
   },
 };
 
-const offset = 6;
-
 function Home() {
+  const rowVariants: Variants = {
+    hidden: {
+      x: useWindowDimensions() + 5,
+    },
+    visible: {
+      x: 0,
+    },
+    exit: {
+      x: -useWindowDimensions() - 5,
+    },
+  };
+  let offset = useWindowDimensions() >= 1200 ? 6 : 3;
   const navigate = useNavigate();
   const bigMovieMatch = useMatch("/movies/:movieId");
   const { scrollY } = useScroll();
@@ -227,6 +226,7 @@ function Home() {
                 exit="exit"
                 transition={{ type: "tween", duration: 1 }}
                 key={index}
+                offset={offset}
               >
                 {data?.results
                   .slice(1)
