@@ -9,33 +9,44 @@ import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 
 const Wrapper = styled.div`
   position: relative;
-  top: -200px;
+  top: -240px;
+  margin: 0 60px;
+`;
+
+const SliderTitle = styled.h2`
+  font-size: 30px;
+  font-weight: 400;
+  margin-bottom: 10px;
 `;
 
 const ButtonArea = styled.div`
-  opacity: 1;
-  z-index: 2;
+  z-index: 1;
   position: absolute;
+  padding: 0 10px;
   width: 100%;
   height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  top: -55px;
+  top: 56px;
   /* background-color: rgba(255, 255, 255, 0.5); */
 `;
 
 const ButtonIcon = styled.button`
-  /* width: 30px;
-  height: 30px; */
+  opacity: 0.5;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 50px;
+  height: 50px;
   border: none;
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s;
   &:hover {
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    opacity: 1;
     scale: 1.3;
   }
   svg {
@@ -82,6 +93,7 @@ const Info = styled(motion.div)`
 
 const Overlay = styled(motion.div)`
   position: fixed;
+  z-index: 2;
   top: 0;
   width: 100%;
   height: 100%;
@@ -91,6 +103,7 @@ const Overlay = styled(motion.div)`
 
 const BigMovie = styled(motion.div)`
   position: absolute;
+  z-index: 3;
   width: 40vw;
   height: 80vh;
   background-color: ${(props) => props.theme.black.lighter};
@@ -147,28 +160,38 @@ const infoVariants: Variants = {
   },
 };
 
+interface IisBack {
+  back: {
+    value: boolean;
+  };
+}
+
 const Slider = ({ data }: { data: IGetMoviesResult }) => {
   let offset = useWindowDimensions() >= 1200 ? 6 : 3;
+  let resizeWidth = useWindowDimensions();
   const navigate = useNavigate();
 
+  const [back, setBack] = useState({ value: false });
   const rowVariants: Variants = {
-    hidden: {
-      x: useWindowDimensions() + 5,
-    },
+    hidden: ({ back }: IisBack) => ({
+      x: !back.value ? resizeWidth : -resizeWidth,
+    }),
     visible: {
       x: 0,
     },
-    exit: {
-      x: -useWindowDimensions() - 5,
-    },
+    exit: ({ back }: IisBack) => ({
+      x: back.value ? resizeWidth : -resizeWidth,
+    }),
   };
 
   const { scrollY } = useScroll();
 
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
+
   const bigMovieMatch = useMatch("/movies/:movieId");
   const increaseIndex = () => {
+    setBack({ value: false });
     if (data) {
       if (leaving) return;
       toggleLeaving();
@@ -178,6 +201,7 @@ const Slider = ({ data }: { data: IGetMoviesResult }) => {
     }
   };
   const decreaseIndex = () => {
+    setBack({ value: true });
     if (data) {
       if (leaving) return;
       toggleLeaving();
@@ -201,7 +225,12 @@ const Slider = ({ data }: { data: IGetMoviesResult }) => {
   return (
     <>
       <Wrapper>
-        <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+        <SliderTitle>{"Now Playing..."}</SliderTitle>
+        <AnimatePresence
+          custom={{ back }}
+          initial={false}
+          onExitComplete={toggleLeaving}
+        >
           <ButtonArea>
             <ButtonIcon onClick={decreaseIndex}>
               <RxDoubleArrowLeft size={50} />
@@ -212,6 +241,7 @@ const Slider = ({ data }: { data: IGetMoviesResult }) => {
           </ButtonArea>
           <Row
             variants={rowVariants}
+            custom={{ back }}
             initial="hidden"
             animate="visible"
             exit="exit"
