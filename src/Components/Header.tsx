@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
+  z-index: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;

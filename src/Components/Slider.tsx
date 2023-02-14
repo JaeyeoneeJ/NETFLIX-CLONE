@@ -63,7 +63,6 @@ const Row = styled(motion.div)<{ offset: number }>`
 `;
 
 const Box = styled(motion.div)`
-  background-color: white;
   font-size: 66px;
   cursor: pointer;
   aspect-ratio: 16 / 9;
