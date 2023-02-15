@@ -13,7 +13,6 @@ import { makeImagePath } from "../utils";
 const Wrapper = styled.div`
   background: black;
   overflow-x: hidden;
-  height: 200vh;
 `;
 
 const Loader = styled.div`
