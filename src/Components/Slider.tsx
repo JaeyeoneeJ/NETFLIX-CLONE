@@ -9,8 +9,26 @@ import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 
 const Wrapper = styled.div`
   position: relative;
-  top: -240px;
-  margin: 0 60px;
+  height: 200px;
+  margin-bottom: 40px;
+  @media screen and (max-width: 1600px) {
+    height: 170px;
+  }
+  @media screen and (max-width: 1400px) {
+    height: 150px;
+  }
+  @media screen and (max-width: 1200px) {
+    height: 220px;
+  }
+  @media screen and (max-width: 1000px) {
+    height: 180px;
+  }
+  @media screen and (max-width: 800px) {
+    height: 150px;
+  }
+  @media screen and (max-width: 600px) {
+    height: 120px;
+  }
 `;
 
 const SliderTitle = styled.h2`
@@ -20,7 +38,6 @@ const SliderTitle = styled.h2`
 `;
 
 const ButtonArea = styled.div`
-  z-index: 1;
   position: absolute;
   padding: 0 10px;
   width: 100%;
@@ -34,6 +51,7 @@ const ButtonArea = styled.div`
 
 const ButtonIcon = styled.button`
   opacity: 0.5;
+  z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,9 +83,13 @@ const Row = styled(motion.div)<{ offset: number }>`
 const Box = styled(motion.div)`
   font-size: 66px;
   cursor: pointer;
-  aspect-ratio: 16 / 9;
+
+  border-radius: 5px;
   img {
     display: block;
+    width: 100%;
+    /* object-fit: cover; */
+    aspect-ratio: 16 / 9;
   }
   &:first-child {
     transform-origin: center left;
@@ -79,11 +101,10 @@ const Box = styled(motion.div)`
 
 const Info = styled(motion.div)`
   padding: 10px;
-  background-color: ${(props) => props.theme.black.lighter};
+  background-color: #181818;
   opacity: 0;
-  position: absolute;
   width: 100%;
-  bottom: 0;
+
   h4 {
     text-align: center;
     font-size: 18px;
@@ -168,9 +189,11 @@ interface IisBack {
 const Slider = ({
   data,
   children,
+  keyword,
 }: {
   data: IGetMoviesResult;
   children: ReactNode;
+  keyword: string;
 }) => {
   let offset = useWindowDimensions() >= 1200 ? 6 : 3;
   let resizeWidth = useWindowDimensions();
@@ -189,12 +212,9 @@ const Slider = ({
     }),
   };
 
-  const { scrollY } = useScroll();
-
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
 
-  const bigMovieMatch = useMatch("/movies/:movieId");
   const increaseIndex = () => {
     setBack({ value: false });
     if (data) {
@@ -218,15 +238,18 @@ const Slider = ({
   const toggleLeaving = () => setLeaving((prev) => !prev);
 
   const onBoxClicked = (movieId: number) => {
-    navigate(`/movies/${movieId}`);
+    navigate(`/movies/${keyword}/${movieId}`);
   };
 
+  const { scrollY } = useScroll();
+
+  const bigMovieMatch = useMatch(`/movies/${keyword}/:movieId`);
   const onOverlayClick = () => navigate("/");
 
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find((movie) => movie.id === +bigMovieMatch.params.movieId!);
-  console.log(clickedMovie);
+  console.log(bigMovieMatch);
   return (
     <>
       <Wrapper>
@@ -259,7 +282,7 @@ const Slider = ({
               .slice(offset * index, offset * index + offset)
               .map((movie) => (
                 <Box
-                  layoutId={movie.id + ""}
+                  layoutId={keyword + movie.id}
                   key={movie.id}
                   variants={boxVariants}
                   whileHover="hover"
@@ -270,7 +293,6 @@ const Slider = ({
                   <img
                     src={makeImagePath(movie.backdrop_path, "w500")}
                     alt="Box-image"
-                    style={{ width: "100%" }}
                   />
                   <Info variants={infoVariants}>
                     <h4>{movie.title}</h4>
@@ -289,7 +311,7 @@ const Slider = ({
               animate={{ opacity: 1 }}
             />
             <BigMovie
-              layoutId={bigMovieMatch.params.movieId}
+              layoutId={keyword + bigMovieMatch.params.movieId}
               style={{ top: scrollY.get() + 100 }}
             >
               {clickedMovie && (
@@ -308,7 +330,6 @@ const Slider = ({
           </>
         ) : null}
       </AnimatePresence>
-      ;
     </>
   );
 };

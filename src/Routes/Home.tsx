@@ -1,6 +1,8 @@
+import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useQuery } from "react-query";
+import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getMovies, IGetMoviesResult } from "../api";
+import { getMovies, getUpcomingMovies, IGetMoviesResult } from "../api";
 import Slider from "../Components/Slider";
 import { makeImagePath } from "../utils";
 
@@ -26,32 +28,49 @@ const Banner = styled.div<{ bgphoto: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgphoto});
   background-size: cover;
-  @media screen and (max-width: 800px) {
-    height: auto;
-  }
+  background-position: center center;
 `;
 
 const Title = styled.h2`
   font-size: 68px;
   font-weight: 400;
   margin-bottom: 20px;
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 1180px) {
     font-size: 46px;
   }
 `;
 const Overview = styled.p`
   font-size: 24px;
   width: 50%;
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 1180px) {
     font-size: 20px;
+    width: 80%;
   }
+`;
+const SliderWrapper = styled.div`
+  top: -240px;
+  margin: 0 60px;
+  position: relative;
+  /* height: auto;
+  display: grid;
+  gap: 40px;
+  grid-template-columns: repeat(1, 1fr);
+  overflow: hidden; */
 `;
 
 function Home() {
   const { data, isLoading } = useQuery<IGetMoviesResult>(
-    ["movies", "nowPlaying"],
+    "getMovies",
     getMovies
   );
+
+  const { data: upComingData } = useQuery<IGetMoviesResult>(
+    "getUpcomingMovies",
+    getUpcomingMovies
+  );
+
+  console.log(data);
+  console.log(upComingData);
 
   return (
     <Wrapper>
@@ -66,7 +85,14 @@ function Home() {
             <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
-          <Slider data={data!}>{"Now Playing..."}</Slider>
+          <SliderWrapper>
+            <Slider keyword="now_playing" data={data!}>
+              {"Now Playing"}
+            </Slider>
+            <Slider keyword="upcoming" data={upComingData!}>
+              {"Upcoming"}
+            </Slider>
+          </SliderWrapper>
         </>
       )}
     </Wrapper>
