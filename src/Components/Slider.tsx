@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useScroll, Variants } from "framer-motion";
+import { AnimatePresence, motion, Variants } from "framer-motion";
 import { ReactNode, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -113,6 +113,7 @@ const Info = styled(motion.div)`
 
 const Overlay = styled(motion.div)`
   position: fixed;
+  margin: 0 -60px;
   z-index: 2;
   top: 0;
   width: 100%;
@@ -122,15 +123,17 @@ const Overlay = styled(motion.div)`
 `;
 
 const BigMovie = styled(motion.div)`
-  position: absolute;
+  position: fixed;
   z-index: 3;
   width: 40vw;
   height: 80vh;
-  background-color: ${(props) => props.theme.black.lighter};
+  background-color: rgb(24, 24, 24);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.75);
+  top: 100px;
   left: 0;
   right: 0;
   margin: 0 auto;
-  border-radius: 15px;
+  border-radius: 10px;
   overflow: hidden;
 `;
 
@@ -139,6 +142,9 @@ const BigCover = styled.div`
   background-size: cover;
   background-position: center center;
   height: 400px;
+
+  background-size: cover;
+  background-position: center center;
 `;
 const BigTitle = styled.h2`
   color: ${(props) => props.theme.white.lighter};
@@ -241,8 +247,6 @@ const Slider = ({
     navigate(`/movies/${keyword}/${movieId}`);
   };
 
-  const { scrollY } = useScroll();
-
   const bigMovieMatch = useMatch(`/movies/${keyword}/:movieId`);
   const onOverlayClick = () => navigate("/");
 
@@ -312,13 +316,13 @@ const Slider = ({
             />
             <BigMovie
               layoutId={keyword + bigMovieMatch.params.movieId}
-              style={{ top: scrollY.get() + 100 }}
+              // style={{ top: scrollY.get() + 100 }}
             >
               {clickedMovie && (
                 <>
                   <BigCover
                     style={{
-                      backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.5), transparent), 
+                      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(24, 24, 24, 1)),                      
                   url(${makeImagePath(clickedMovie.backdrop_path, "w500")})`,
                     }}
                   />
