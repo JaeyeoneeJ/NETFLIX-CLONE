@@ -249,7 +249,7 @@ const SliderTv = ({
   };
 
   const bigTvMatch = useMatch(`/tvs/${keyword}/:tvId`);
-  const onOverlayClick = () => navigate("/");
+  const onOverlayClick = () => navigate("/tv");
 
   const clickedTv =
     bigTvMatch?.params.tvId &&
@@ -329,12 +329,21 @@ const SliderTv = ({
             >
               {clickedTv && (
                 <>
-                  <BigCover
-                    style={{
-                      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(24, 24, 24, 1)),                      
-                  url(${makeImagePath(clickedTv.backdrop_path, "w500")})`,
-                    }}
-                  />
+                  {clickedTv.backdrop_path === null ? (
+                    <BigCover
+                      style={{
+                        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(24, 24, 24, 1)),                      
+                  url(${makeImagePath(clickedTv.poster_path, "w500")})`,
+                      }}
+                    />
+                  ) : (
+                    <BigCover
+                      style={{
+                        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(24, 24, 24, 1)),                      
+                url(${makeImagePath(clickedTv.backdrop_path, "w500")})`,
+                      }}
+                    />
+                  )}
                   <BigTitle>{clickedTv.name}</BigTitle>
                   <BigOverview>{clickedTv.overview}</BigOverview>
                 </>
