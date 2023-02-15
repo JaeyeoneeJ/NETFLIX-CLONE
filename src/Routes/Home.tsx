@@ -1,8 +1,12 @@
-import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useQuery } from "react-query";
-import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getMovies, getUpcomingMovies, IGetMoviesResult } from "../api";
+import {
+  getMovies,
+  getPopularMovies,
+  getTopRatedMovies,
+  getUpcomingMovies,
+  IGetMoviesResult,
+} from "../api";
 import Slider from "../Components/Slider";
 import { makeImagePath } from "../utils";
 
@@ -68,9 +72,14 @@ function Home() {
     "getUpcomingMovies",
     getUpcomingMovies
   );
-
-  console.log(data);
-  console.log(upComingData);
+  const { data: topRateData } = useQuery<IGetMoviesResult>(
+    "getTopRatedMovies",
+    getTopRatedMovies
+  );
+  const { data: popularData } = useQuery<IGetMoviesResult>(
+    "getPopularMovies",
+    getPopularMovies
+  );
 
   return (
     <Wrapper>
@@ -78,16 +87,19 @@ function Home() {
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner
-            // onClick={increaseIndex}
-            bgphoto={makeImagePath(data?.results[0].backdrop_path || "")}
-          >
+          <Banner bgphoto={makeImagePath(data?.results[0].backdrop_path || "")}>
             <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
           <SliderWrapper>
             <Slider keyword="now_playing" data={data!}>
               {"Now Playing"}
+            </Slider>
+            <Slider keyword="top_rated" data={topRateData!}>
+              {"Top Rated"}
+            </Slider>
+            <Slider keyword="popular" data={popularData!}>
+              {"Popular"}
             </Slider>
             <Slider keyword="upcoming" data={upComingData!}>
               {"Upcoming"}

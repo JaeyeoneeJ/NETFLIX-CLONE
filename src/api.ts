@@ -20,13 +20,25 @@ export interface IGetMoviesResult {
   total_results: number;
 }
 export function getMovies() {
-  return fetch(
-    `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR`
-  ).then((responce) => responce.json());
+  return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}`).then(
+    (responce) => responce.json()
+  );
 }
 
 export function getUpcomingMovies() {
-  return fetch(
-    `${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko-KR`
-  ).then((responce) => responce.json());
+  return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}`).then(
+    (responce) => responce.json()
+  );
+}
+
+export function getTopRatedMovies() {
+  return fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}`).then(
+    (responce) => responce.json()
+  );
+}
+
+export function getPopularMovies() {
+  return fetch(`${BASE_PATH}/movie/popular?api_key=${API_KEY}`).then(
+    (responce) => responce.json()
+  );
 }
