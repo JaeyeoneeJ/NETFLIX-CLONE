@@ -120,6 +120,7 @@ const Overlay = styled(motion.div)`
   height: 100%;
   opacity: 0;
   background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
 `;
 
 const BigMovie = styled(motion.div)`
