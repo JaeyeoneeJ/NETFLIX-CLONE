@@ -152,23 +152,28 @@ const BigCover = styled.div`
 `;
 const BigWrapper = styled.div`
   padding: 20px;
+  width: 100%;
   position: relative;
   top: -80px;
 `;
-const VoteAverage = styled.div`
+const BigWrapperHeader = styled.div`
+  width: 100%;
   display: flex;
-  align-items: center;
+  gap: 30px;
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 20px;
+`;
+const VoteAverage = styled.span`
+  display: flex;
   gap: 10px;
+  color: #ffd954;
   svg {
     color: #ffd954;
   }
-  p {
-    display: flex;
-    align-items: center;
-    color: #ffd954;
-    font-size: 24px;
-    font-weight: 600;
-  }
+`;
+const BigHeaderText = styled.span`
+  color: white;
 `;
 const BigTitle = styled.h2`
   color: ${(props) => props.theme.white.lighter};
@@ -177,8 +182,18 @@ const BigTitle = styled.h2`
   position: relative;
   top: -80px;
 `;
+const BigWrapperHeader2 = styled(BigWrapperHeader)`
+  gap: 10px;
+`;
 const BigOverview = styled.p`
   color: ${(props) => props.theme.white.lighter};
+`;
+const Genres = styled.span`
+  font-size: 14px;
+  font-weight: 300;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background-color: #ab3e48;
 `;
 
 const boxVariants: Variants = {
@@ -366,15 +381,26 @@ const Slider = ({
                   <BigTitle>{clickedMovie.title}</BigTitle>
                   {movieDetailValue && (
                     <BigWrapper>
-                      <VoteAverage>
-                        <FaStar size={24} />
-                        <p>
+                      <BigWrapperHeader>
+                        <VoteAverage>
+                          <FaStar size={20} />
                           {(
                             Math.round(movieDetailValue.vote_average * 100) /
                             100
                           ).toFixed(2)}
-                        </p>
-                      </VoteAverage>
+                        </VoteAverage>
+                        <BigHeaderText>
+                          {movieDetailValue.release_date}
+                        </BigHeaderText>
+                        <BigHeaderText>
+                          {movieDetailValue.runtime}분
+                        </BigHeaderText>
+                      </BigWrapperHeader>
+                      <BigWrapperHeader2>
+                        {movieDetailValue.genres.map((genre) => (
+                          <Genres>{genre.name}</Genres>
+                        ))}
+                      </BigWrapperHeader2>
                       <BigOverview>{clickedMovie.overview}</BigOverview>
                     </BigWrapper>
                   )}
