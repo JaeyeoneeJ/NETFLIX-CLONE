@@ -7,7 +7,7 @@ import useWindowDimensions from "../Hook/useWindowDimensions";
 import { makeImagePath } from "../utils";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 import { useRecoilState } from "recoil";
-import { movieDetail } from "../atoms";
+import { movieCredits, movieDetail } from "../atoms";
 import { FaStar } from "react-icons/fa";
 
 const Wrapper = styled.div`
@@ -127,10 +127,11 @@ const Overlay = styled(motion.div)`
 `;
 
 const BigMovie = styled(motion.div)`
-  position: fixed;
+  position: absolute;
+  top: 0;
   z-index: 3;
   width: 40vw;
-  height: 80vh;
+  /* height: 80vh; */
   background-color: rgb(24, 24, 24);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.75);
   top: 100px;
@@ -152,6 +153,9 @@ const BigCover = styled.div`
 `;
 const BigWrapper = styled.div`
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   width: 100%;
   position: relative;
   top: -80px;
@@ -162,7 +166,6 @@ const BigWrapperHeader = styled.div`
   gap: 30px;
   font-size: 20px;
   font-weight: 400;
-  margin-bottom: 20px;
 `;
 const VoteAverage = styled.span`
   display: flex;
@@ -194,6 +197,25 @@ const Genres = styled.span`
   padding: 2px 5px;
   border-radius: 5px;
   background-color: #ab3e48;
+`;
+const MiddleTitle = styled.h4`
+  font-size: 20px;
+  font-weight: 400;
+`;
+const CastMembers = styled.div<{ offset: number }>`
+  display: grid;
+  grid-template-columns: repeat(${(props) => props.offset}, 1fr);
+  gap: 5px;
+  width: 100%;
+`;
+const Member = styled.div`
+  width: 100%;
+  img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 3 / 4;
+  }
 `;
 
 const boxVariants: Variants = {
@@ -241,6 +263,8 @@ const Slider = ({
   let resizeWidth = useWindowDimensions();
   const navigate = useNavigate();
   const [movieDetailValue, setMovieDetailValue] = useRecoilState(movieDetail);
+  const [movieCreditsValue, setMovieCreditsValue] =
+    useRecoilState(movieCredits);
 
   const [back, setBack] = useState({ value: false });
   const rowVariants: Variants = {
@@ -300,10 +324,14 @@ const Slider = ({
       );
       let response = await data.json();
       setMovieDetailValue(response);
-      return response;
+
+      let creditsData = await fetch(
+        `${process.env.REACT_APP_API_BASE_PATH}/movie/${movieId}/credits?api_key=${process.env.REACT_APP_API_KEY}`
+      );
+      let creditsResponse = await creditsData.json();
+      setMovieCreditsValue(creditsResponse);
     };
     clickedMovie && detailMovie(clickedMovie.id + "");
-    console.log(movieDetailValue);
   }, [clickedMovie]);
 
   return (
@@ -380,29 +408,42 @@ const Slider = ({
                   />
                   <BigTitle>{clickedMovie.title}</BigTitle>
                   {movieDetailValue && (
-                    <BigWrapper>
-                      <BigWrapperHeader>
-                        <VoteAverage>
-                          <FaStar size={20} />
-                          {(
-                            Math.round(movieDetailValue.vote_average * 100) /
-                            100
-                          ).toFixed(2)}
-                        </VoteAverage>
-                        <BigHeaderText>
-                          {movieDetailValue.release_date}
-                        </BigHeaderText>
-                        <BigHeaderText>
-                          {movieDetailValue.runtime}분
-                        </BigHeaderText>
-                      </BigWrapperHeader>
-                      <BigWrapperHeader2>
-                        {movieDetailValue.genres.map((genre) => (
-                          <Genres>{genre.name}</Genres>
-                        ))}
-                      </BigWrapperHeader2>
-                      <BigOverview>{clickedMovie.overview}</BigOverview>
-                    </BigWrapper>
+                    <>
+                      <BigWrapper>
+                        <BigWrapperHeader>
+                          <VoteAverage>
+                            <FaStar size={20} />
+                            {(
+                              Math.round(movieDetailValue.vote_average * 100) /
+                              100
+                            ).toFixed(2)}
+                          </VoteAverage>
+                          <BigHeaderText>
+                            {movieDetailValue.release_date}
+                          </BigHeaderText>
+                          <BigHeaderText>
+                            {movieDetailValue.runtime}분
+                          </BigHeaderText>
+                        </BigWrapperHeader>
+                        <BigWrapperHeader2>
+                          {movieDetailValue.genres.map((genre) => (
+                            <Genres>{genre.name}</Genres>
+                          ))}
+                        </BigWrapperHeader2>
+                        <BigOverview>{clickedMovie.overview}</BigOverview>
+                        <MiddleTitle>Cast Members</MiddleTitle>
+                        <CastMembers offset={offset}>
+                          {movieCreditsValue.cast.map((person) => (
+                            <Member>
+                              <img
+                                src={makeImagePath(person.profile_path)}
+                                alt="profile_img"
+                              />
+                            </Member>
+                          ))}
+                        </CastMembers>
+                      </BigWrapper>
+                    </>
                   )}
                 </>
               )}

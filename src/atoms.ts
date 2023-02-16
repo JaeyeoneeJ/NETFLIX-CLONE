@@ -27,3 +27,22 @@ export const movieDetail = atom<ImovieDetail>({
   key: "movieDetail",
   default: undefined,
 });
+
+interface ImovieCredits {
+  id: number;
+  cast: [
+    {
+      gender: number;
+      id: number;
+      known_for_department: string;
+      name: string;
+      profile_path: string;
+      character: string;
+    }
+  ];
+}
+
+export const movieCredits = atom<ImovieCredits>({
+  key: "movieCredits",
+  default: undefined,
+});
