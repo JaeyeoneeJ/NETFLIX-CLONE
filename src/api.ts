@@ -43,6 +43,12 @@ export function getPopularMovies() {
   );
 }
 
+export const getDetailMovie = async (movieId?: string) => {
+  let data = await fetch(`${BASE_PATH}/movie/${movieId}?api_key=${API_KEY}`);
+  let response = await data.json();
+  return response;
+};
+
 // TV API
 interface Itv {
   id: number;
