@@ -125,13 +125,11 @@ const Overlay = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(5px);
 `;
-
-const BigMovie = styled(motion.div)`
-  position: absolute;
-  top: 0;
+const Modal = styled(motion.div)`
+  position: fixed;
   z-index: 3;
   width: 1000px;
-  /* height: 80vh; */
+  height: 80vh;
   background-color: rgb(24, 24, 24);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.75);
   top: 100px;
@@ -148,6 +146,10 @@ const BigMovie = styled(motion.div)`
     width: 80vw;
   }
 `;
+const BigMovie = styled.div`
+  overflow-y: auto;
+  height: 100%;
+`;
 
 const BigCover = styled.div`
   width: 100%;
@@ -159,13 +161,14 @@ const BigCover = styled.div`
   background-position: center center;
 `;
 const BigWrapper = styled.div`
+  position: relative;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  position: relative;
   top: -80px;
+  height: 100%;
 `;
 const BigWrapperHeader = styled.div`
   width: 100%;
@@ -214,6 +217,7 @@ const CastMembers = styled.div<{ offset: number }>`
   grid-template-columns: repeat(${(props) => props.offset}, 1fr);
   gap: 5px;
   width: 100%;
+  height: 100%;
 `;
 const Member = styled.div`
   width: 100%;
@@ -409,71 +413,78 @@ const Slider = ({
               exit={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             />
-            <BigMovie
+            <Modal
               layoutId={keyword + bigMovieMatch.params.movieId}
               // style={{ top: scrollY.get() + 100 }}
             >
-              {clickedMovie && (
-                <>
-                  <BigCover
-                    style={{
-                      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(24, 24, 24, 1)),                      
-                  url(${makeImagePath(clickedMovie.backdrop_path, "w500")})`,
-                    }}
-                  />
-                  <BigTitle>{clickedMovie.title}</BigTitle>
-                  {movieDetailValue && (
-                    <>
-                      <BigWrapper>
-                        <BigWrapperHeader>
-                          <VoteAverage>
-                            <FaStar size={20} />
-                            {(
-                              Math.round(movieDetailValue.vote_average * 100) /
-                              100
-                            ).toFixed(2)}
-                          </VoteAverage>
-                          <BigHeaderText>
-                            {movieDetailValue.release_date}
-                          </BigHeaderText>
-                          <BigHeaderText>
-                            {movieDetailValue.runtime}분
-                          </BigHeaderText>
-                        </BigWrapperHeader>
-                        <BigWrapperHeader2>
-                          {movieDetailValue.genres.map((genre) => (
-                            <Genres>{genre.name}</Genres>
-                          ))}
-                        </BigWrapperHeader2>
-                        <BigOverview>{clickedMovie.overview}</BigOverview>
-                        <MiddleTitle>Cast Members</MiddleTitle>
-                        {movieCreditsValue && (
-                          <CastMembers offset={offset}>
-                            {movieCreditsValue.cast
-                              .filter((person) => person.profile_path !== null)
-                              .slice(0, 12)
-                              .map((person) => (
-                                <Member key={person.id}>
-                                  <img
-                                    src={makeImagePath(person.profile_path)}
-                                    alt="profile_img"
-                                  />
-                                  <MemberText>
-                                    <BigHeaderText>{person.name}</BigHeaderText>
-                                    <BigHeaderText>
-                                      ({person.character})
-                                    </BigHeaderText>
-                                  </MemberText>
-                                </Member>
-                              ))}
-                          </CastMembers>
-                        )}
-                      </BigWrapper>
-                    </>
-                  )}
-                </>
-              )}
-            </BigMovie>
+              <BigMovie>
+                {clickedMovie && (
+                  <>
+                    <BigCover
+                      style={{
+                        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(24, 24, 24, 1)),                      
+                    url(${makeImagePath(clickedMovie.backdrop_path, "w500")})`,
+                      }}
+                    />
+                    <BigTitle>{clickedMovie.title}</BigTitle>
+                    {movieDetailValue && (
+                      <>
+                        <BigWrapper>
+                          <BigWrapperHeader>
+                            <VoteAverage>
+                              <FaStar size={20} />
+                              {(
+                                Math.round(
+                                  movieDetailValue.vote_average * 100
+                                ) / 100
+                              ).toFixed(2)}
+                            </VoteAverage>
+                            <BigHeaderText>
+                              {movieDetailValue.release_date}
+                            </BigHeaderText>
+                            <BigHeaderText>
+                              {movieDetailValue.runtime}분
+                            </BigHeaderText>
+                          </BigWrapperHeader>
+                          <BigWrapperHeader2>
+                            {movieDetailValue.genres.map((genre) => (
+                              <Genres>{genre.name}</Genres>
+                            ))}
+                          </BigWrapperHeader2>
+                          <BigOverview>{clickedMovie.overview}</BigOverview>
+                          <MiddleTitle>Cast Members</MiddleTitle>
+                          {movieCreditsValue && (
+                            <CastMembers offset={offset}>
+                              {movieCreditsValue.cast
+                                .filter(
+                                  (person) => person.profile_path !== null
+                                )
+                                .slice(0, 12)
+                                .map((person) => (
+                                  <Member key={person.id}>
+                                    <img
+                                      src={makeImagePath(person.profile_path)}
+                                      alt="profile_img"
+                                    />
+                                    <MemberText>
+                                      <BigHeaderText>
+                                        {person.name}
+                                      </BigHeaderText>
+                                      <BigHeaderText>
+                                        ({person.character})
+                                      </BigHeaderText>
+                                    </MemberText>
+                                  </Member>
+                                ))}
+                            </CastMembers>
+                          )}
+                        </BigWrapper>
+                      </>
+                    )}
+                  </>
+                )}
+              </BigMovie>
+            </Modal>
           </>
         ) : null}
       </AnimatePresence>
