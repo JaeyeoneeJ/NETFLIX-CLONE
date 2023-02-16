@@ -1,11 +1,14 @@
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IGetMoviesResult } from "../api";
 import useWindowDimensions from "../Hook/useWindowDimensions";
 import { makeImagePath } from "../utils";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
+import { useRecoilState } from "recoil";
+import { movieDetail } from "../atoms";
+import { FaStar } from "react-icons/fa";
 
 const Wrapper = styled.div`
   position: relative;
@@ -147,6 +150,26 @@ const BigCover = styled.div`
   background-size: cover;
   background-position: center center;
 `;
+const BigWrapper = styled.div`
+  padding: 20px;
+  position: relative;
+  top: -80px;
+`;
+const VoteAverage = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  svg {
+    color: #ffd954;
+  }
+  p {
+    display: flex;
+    align-items: center;
+    color: #ffd954;
+    font-size: 24px;
+    font-weight: 600;
+  }
+`;
 const BigTitle = styled.h2`
   color: ${(props) => props.theme.white.lighter};
   padding: 20px;
@@ -155,9 +178,6 @@ const BigTitle = styled.h2`
   top: -80px;
 `;
 const BigOverview = styled.p`
-  padding: 20px;
-  position: relative;
-  top: -80px;
   color: ${(props) => props.theme.white.lighter};
 `;
 
@@ -205,6 +225,7 @@ const Slider = ({
   let offset = useWindowDimensions() >= 1200 ? 6 : 3;
   let resizeWidth = useWindowDimensions();
   const navigate = useNavigate();
+  const [movieDetailValue, setMovieDetailValue] = useRecoilState(movieDetail);
 
   const [back, setBack] = useState({ value: false });
   const rowVariants: Variants = {
@@ -254,7 +275,22 @@ const Slider = ({
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find((movie) => movie.id === +bigMovieMatch.params.movieId!);
-  console.log(bigMovieMatch);
+  // console.log(bigMovieMatch);
+  // console.log(movieDetailValue);
+
+  useEffect(() => {
+    const detailMovie = async (movieId: string) => {
+      let data = await fetch(
+        `${process.env.REACT_APP_API_BASE_PATH}/movie/${movieId}?api_key=${process.env.REACT_APP_API_KEY}`
+      );
+      let response = await data.json();
+      setMovieDetailValue(response);
+      return response;
+    };
+    clickedMovie && detailMovie(clickedMovie.id + "");
+    console.log(movieDetailValue);
+  }, [clickedMovie]);
+
   return (
     <>
       <Wrapper>
@@ -328,7 +364,20 @@ const Slider = ({
                     }}
                   />
                   <BigTitle>{clickedMovie.title}</BigTitle>
-                  <BigOverview>{clickedMovie.overview}</BigOverview>
+                  {movieDetailValue && (
+                    <BigWrapper>
+                      <VoteAverage>
+                        <FaStar size={24} />
+                        <p>
+                          {(
+                            Math.round(movieDetailValue.vote_average * 100) /
+                            100
+                          ).toFixed(2)}
+                        </p>
+                      </VoteAverage>
+                      <BigOverview>{clickedMovie.overview}</BigOverview>
+                    </BigWrapper>
+                  )}
                 </>
               )}
             </BigMovie>
