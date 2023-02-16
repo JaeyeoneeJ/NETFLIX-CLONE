@@ -130,7 +130,7 @@ const BigMovie = styled(motion.div)`
   position: absolute;
   top: 0;
   z-index: 3;
-  width: 40vw;
+  width: 1000px;
   /* height: 80vh; */
   background-color: rgb(24, 24, 24);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.75);
@@ -140,6 +140,13 @@ const BigMovie = styled(motion.div)`
   margin: 0 auto;
   border-radius: 10px;
   overflow: hidden;
+  @media screen and (max-width: 1200px) {
+    width: 800px;
+  }
+  @media screen and (max-width: 1000px) {
+    margin: 0;
+    width: 80vw;
+  }
 `;
 
 const BigCover = styled.div`
@@ -210,12 +217,20 @@ const CastMembers = styled.div<{ offset: number }>`
 `;
 const Member = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 30px;
   img {
     display: block;
     width: 100%;
     object-fit: cover;
     aspect-ratio: 3 / 4;
   }
+`;
+const MemberText = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const boxVariants: Variants = {
@@ -432,16 +447,27 @@ const Slider = ({
                         </BigWrapperHeader2>
                         <BigOverview>{clickedMovie.overview}</BigOverview>
                         <MiddleTitle>Cast Members</MiddleTitle>
-                        <CastMembers offset={offset}>
-                          {movieCreditsValue.cast.map((person) => (
-                            <Member>
-                              <img
-                                src={makeImagePath(person.profile_path)}
-                                alt="profile_img"
-                              />
-                            </Member>
-                          ))}
-                        </CastMembers>
+                        {movieCreditsValue && (
+                          <CastMembers offset={offset}>
+                            {movieCreditsValue.cast
+                              .filter((person) => person.profile_path !== null)
+                              .slice(0, 12)
+                              .map((person) => (
+                                <Member key={person.id}>
+                                  <img
+                                    src={makeImagePath(person.profile_path)}
+                                    alt="profile_img"
+                                  />
+                                  <MemberText>
+                                    <BigHeaderText>{person.name}</BigHeaderText>
+                                    <BigHeaderText>
+                                      ({person.character})
+                                    </BigHeaderText>
+                                  </MemberText>
+                                </Member>
+                              ))}
+                          </CastMembers>
+                        )}
                       </BigWrapper>
                     </>
                   )}
