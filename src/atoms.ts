@@ -46,3 +46,55 @@ export const movieCredits = atom<ImovieCredits>({
   key: "movieCredits",
   default: undefined,
 });
+
+interface ItvDetail {
+  backdrop_path: string;
+  first_air_date: string;
+  genres: [
+    {
+      id: number;
+      name: string;
+    }
+  ];
+  homepage: string;
+  id: number;
+  last_air_date: string;
+  name: string;
+  number_of_episodes: number;
+  number_of_seasons: number;
+  overview: string;
+  poster_path: string;
+  production_companies: [
+    {
+      id: number;
+      logo_path: string;
+      name: string;
+      origin_country: string;
+    }
+  ];
+  status: string;
+  vote_average: number;
+}
+
+export const tvDetail = atom<ItvDetail>({
+  key: "tvDetail",
+  default: undefined,
+});
+
+interface ItvCredits {
+  cast: [
+    {
+      id: number;
+      known_for_department: string;
+      name: string;
+      profile_path: string;
+      character: string;
+    }
+  ];
+  id: number;
+}
+
+export const tvCredits = atom<ItvCredits>({
+  key: "tvCredits",
+  default: undefined,
+});

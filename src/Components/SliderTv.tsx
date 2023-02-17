@@ -6,6 +6,8 @@ import { IGetTvsResult } from "../api";
 import useWindowDimensions from "../Hook/useWindowDimensions";
 import { makeImagePath } from "../utils";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
+import { useRecoilState } from "recoil";
+import { FaStar } from "react-icons/fa";
 
 const Wrapper = styled.div`
   position: relative;
