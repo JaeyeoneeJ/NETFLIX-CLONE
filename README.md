@@ -4,6 +4,8 @@
 
 <a href="https://netflix-clone-jaeyeoneej.vercel.app/">클릭! 넷플릭스 클론 구경하기</a>
 
+## 설명
+
 - animate에 중점을 두고 넷플릭스를 클론한 프로젝트입니다.
 - the movie DB에서 data를 fetching하였습니다.
   <a href="https://www.themoviedb.org/">https://www.themoviedb.org/</a>
