@@ -142,7 +142,7 @@ const Modal = styled(motion.div)`
     width: 800px;
   }
   @media screen and (max-width: 1000px) {
-    margin: 0;
+    /* margin: 0; */
     width: 80vw;
   }
 `;

@@ -1,6 +1,6 @@
 # NETFLIX-CLONE
 
-<img width="100%" src="https://user-images.githubusercontent.com/77138259/218395467-fa006faf-1dfb-4be6-b783-9dab8d346b37.png" />
+<img width="100%" src="https://user-images.githubusercontent.com/77138259/219952532-e950a5a6-a1f5-424f-9541-5af1c945d064.png" />
 
 <a href="https://netflix-clone-jaeyeoneej.vercel.app/">클릭! 넷플릭스 클론 구경하기</a>
 
